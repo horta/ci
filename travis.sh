@@ -13,3 +13,7 @@ pip install -r requirements.txt
 cd doc && make html && cd $TRAVIS_BUILD_DIR
 git clean -xdf
 python setup.py sdist
+pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
+cd ..
+python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
+cd $TRAVIS_BUILD_DIR
