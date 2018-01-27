@@ -19,9 +19,12 @@ pip uninstall %PKG_NAME% --yes
 cd %APPVEYOR_BUILD_FOLDER%
 pip install -r requirements.txt
 
-cd doc && make html
-if errorlevel 1 exit 1
+if exist doc\make.bat (
+  cd doc && make.bat html
+  if errorlevel 1 exit 1
+  cd %APPVEYOR_BUILD_FOLDER%
+)
 
-cd .. && python setup.py sdist
+python setup.py sdist
 
 @echo on
