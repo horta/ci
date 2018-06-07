@@ -2,7 +2,7 @@
 
 set -e
 
-pip install -U setuptools pip pypandoc -q
+pip install -U setuptools pip pytest pytest-pycodestyle -q
 python setup.py test && git clean -xdf
 pip install . && git clean -xdf
 cd ..
