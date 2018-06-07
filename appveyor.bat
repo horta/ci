@@ -1,7 +1,7 @@
 @echo off
 
 set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
-pip install -U setuptools pip pypandoc
+pip install -U setuptools pip pytest pytest-pycodestyle -q
 
 python setup.py build_ext --inplace
 if errorlevel 1 exit 1
