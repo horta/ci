@@ -1,7 +1,7 @@
 @echo off
 
 echo %PATH%
-python -m pip install -U setuptools pip pytest pytest-runner pytest-pycodestyle cffi numpy -q
+python -m pip install -U setuptools pip pytest pytest-runner pytest-pycodestyle cffi numpy
 
 python setup.py test
 if errorlevel 1 exit 1
