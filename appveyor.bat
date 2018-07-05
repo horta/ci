@@ -1,10 +1,7 @@
 @echo off
 
-set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
+echo %PATH%
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
-
-python setup.py build_ext --inplace
-if errorlevel 1 exit 1
 
 python setup.py test
 if errorlevel 1 exit 1
