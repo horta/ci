@@ -1,12 +1,12 @@
 @echo off
 
 echo %PATH%
-python -m pip install -U setuptools pip pytest pytest-runner pytest-pycodestyle cffi numpy
+python -m pip install -U cffi numpy pip pytest pytest-pycodestyle setuptools
 
 python setup.py test
 if errorlevel 1 exit 1
 
-pip install .
+python -m pip install .
 cd ..
 
 python -c "import sys; import %PKG_NAME%; sys.exit(%PKG_NAME%.test())"
