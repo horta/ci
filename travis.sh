@@ -3,7 +3,7 @@
 set -e
 
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
-python -m pip install -U --only-binary numpy -q
+python -m pip install -U numpy -q --only-binary :all:
 python setup.py test && git clean -xdf
 python -m pip install . && git clean -xdf
 cd ..
