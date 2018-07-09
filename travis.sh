@@ -2,18 +2,19 @@
 
 set -e
 
-pip install -U setuptools pip pytest pytest-pycodestyle -q
+python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
+python -m pip install -U --only-binary numpy -q
 python setup.py test && git clean -xdf
-pip install . && git clean -xdf
+python -m pip install . && git clean -xdf
 cd ..
 python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
-pip uninstall $PKG_NAME --yes
+python -m pip uninstall $PKG_NAME --yes
 cd $TRAVIS_BUILD_DIR && git clean -xdf
-pip install -r requirements.txt -q
+python -m pip install -r requirements.txt -q
 cd doc && make html && cd $TRAVIS_BUILD_DIR
 git clean -xdf
 python setup.py sdist
-pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
+python -m pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
 cd ..
 python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
 cd $TRAVIS_BUILD_DIR
