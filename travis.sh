@@ -3,7 +3,8 @@
 set -e
 
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
-python -m pip install -U numpy -q --only-binary :all:
+python -m pip uninstall numpy scipy -q -y
+python -m pip install -U intel-numpy intel-scipy -q
 python setup.py test && git clean -xdf
 python -m pip install . && git clean -xdf
 cd ..
