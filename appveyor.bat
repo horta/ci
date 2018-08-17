@@ -1,6 +1,6 @@
 @echo off
 
-set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
+set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
 
 echo %PATH%
 echo %PYTHON%
