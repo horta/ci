@@ -1,21 +1,24 @@
 @echo off
 
+set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
+
 echo %PATH%
 echo %PYTHON%
-%PYTHON% -m pip install -U cffi numpy pip pytest pytest-pycodestyle setuptools -q
 
-%PYTHON% setup.py test
+python -m pip install -U cffi numpy pip pytest pytest-pycodestyle setuptools -q
+
+python setup.py test
 if errorlevel 1 exit 1
 
-%PYTHON% -m pip install .
+python -m pip install .
 cd ..
 
-%PYTHON% -c "import sys; import %PKG_NAME%; sys.exit(%PKG_NAME%.test())"
+python -c "import sys; import %PKG_NAME%; sys.exit(%PKG_NAME%.test())"
 if errorlevel 1 exit 1
 
-%PYTHON% -m pip uninstall %PKG_NAME% --yes
+python -m pip uninstall %PKG_NAME% --yes
 cd %APPVEYOR_BUILD_FOLDER%
-%PYTHON% -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 
 if exist doc\make.bat (
   cd doc && make.bat html
@@ -23,6 +26,6 @@ if exist doc\make.bat (
   cd %APPVEYOR_BUILD_FOLDER%
 )
 
-%PYTHON% setup.py sdist
+python setup.py sdist
 
 @echo on
