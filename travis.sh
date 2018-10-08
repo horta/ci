@@ -11,8 +11,10 @@ python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
 python -m pip uninstall $PKG_NAME --yes
 cd $TRAVIS_BUILD_DIR && git clean -xdf
 python -m pip install -r requirements.txt -q
+python -m pip install --process-dependency-links . && git clean -xdf
 [ -d doc ] && cd doc && make html && cd $TRAVIS_BUILD_DIR
 git clean -xdf
+python -m pip uninstall $PKG_NAME --yes
 python setup.py sdist
 python -m pip install --process-dependency-links dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
 cd ~/
