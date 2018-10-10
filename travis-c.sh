@@ -2,6 +2,7 @@
 
 set -e
 
+bash <(curl -fsSL https://raw.githubusercontent.com/horta/ci/check-version.sh)
 
 mkdir build && pushd build
 cmake .. -DCMAKE_INSTALL_PREFIX=$TRAVIS_BUILD_DIR -DCMAKE_BUILD_TYPE=Release
@@ -16,3 +17,4 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then test -e $TRAVIS_BUILD_DIR/include/$PKG
 bash <(curl -fsSL https://raw.githubusercontent.com/limix/$PKG_NAME/master/install)
 
 cd $TRAVIS_BUILD_DIR
+

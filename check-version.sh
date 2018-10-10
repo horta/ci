@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+function trim
+{
+    trimmed=$([[ "$1" =~ [[:space:]]*([^[:space:]]|[^[:space:]].*[^[:space:]])[[:space:]]* ]]; echo -n "${BASH_REMATCH[1]}")
+    echo $trimmed
+}
+
+PRJ_NAME=$(trim $(cat NAME))
+VERSION=$(trim $(cat VERSION))
+HEADER=include/$PRJ_NAME.h
+
+if ! [ -a ${HEADER} ]; then
+    echo "File ${HEADER} does not exist."
+    exit 1
+fi
+
+SVER=$(cat ${HEADER} | grep "BGEN_VERSION " | cut -d' ' -f3 | tr -d '"')
+
+if [[ $VERSION != $SVER ]];
+then
+    echo "$VERSION and $SVER differ."
+    echo "Please, compare $HEADER with VERSION file."
+    exit 1
+fi
+
+VERSION_MAJOR=$(echo $VERSION | cut -d'.' -f1)
+VERSION_MINOR=$(echo $VERSION | cut -d'.' -f2)
+VERSION_PATCH=$(echo $VERSION | cut -d'.' -f3)
+
+MAJOR=$(cat ${HEADER} | grep "BGEN_VERSION_MAJOR " | cut -d' ' -f3 | tr -d ' ')
+MINOR=$(cat ${HEADER} | grep "BGEN_VERSION_MINOR " | cut -d' ' -f3 | tr -d ' ')
+PATCH=$(cat ${HEADER} | grep "BGEN_VERSION_PATCH " | cut -d' ' -f3 | tr -d ' ')
+
+if [ $VERSION_MAJOR -ne $MAJOR ]; then
+    echo "$VERSION_MAJOR and $MAJOR differ."
+    echo "Please, compare $HEADER with VERSION file."
+    exit 1
+fi
+
+if [ $VERSION_MINOR -ne $MINOR ]; then
+    echo "$VERSION_MINOR and $MINOR differ."
+    echo "Please, compare $HEADER with VERSION file."
+    exit 1
+fi
+
+if [ $VERSION_PATCH -ne $PATCH ]; then
+    echo "$VERSION_PATCH and $PATCH differ."
+    echo "Please, compare $HEADER with VERSION file."
+    exit 1
+fi
+
+exit 0
