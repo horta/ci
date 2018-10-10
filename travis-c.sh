@@ -2,7 +2,7 @@
 
 set -e
 
-bash <(curl -fsSL https://raw.githubusercontent.com/horta/ci/check-version.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/horta/ci/master/check-version.sh)
 
 mkdir build && pushd build
 cmake .. -DCMAKE_INSTALL_PREFIX=$TRAVIS_BUILD_DIR -DCMAKE_BUILD_TYPE=Release
