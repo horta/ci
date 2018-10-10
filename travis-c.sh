@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -o xtrace
 
 bash <(curl -fsSL https://raw.githubusercontent.com/horta/ci/master/check-version.sh)
 
