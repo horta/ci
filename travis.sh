@@ -5,7 +5,7 @@ set -e
 MAJOR=$(python -c 'import platform; print(platform.python_version())' | awk -F '.' '{print $1}')
 
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
-python -m pip install -U numpy flake8 doc8 -q
+python -m pip install -U numpy flake8 doc8 pygments -q
 
 if ! flake8;
 then
