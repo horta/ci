@@ -6,7 +6,8 @@ MAJOR=$(python --version | awk -F ' ' '{print $2}' | awk -F '.' '{print $1}')
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
 python -m pip install -U numpy flake8 doc8 -q
 
-if [[ "$MAJOR" -gt 2 ]];
+echo "MAJOR: $MAJOR"
+if [[ $MAJOR -gt 2 ]];
 then
     python -m pip install -U black -q
     git clean -xdf
