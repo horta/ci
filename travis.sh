@@ -2,12 +2,23 @@
 
 set -e
 
-echo `python -c 'import platform; print(platform.python_version())'`
 MAJOR=$(python -c 'import platform; print(platform.python_version())' | awk -F '.' '{print $1}')
+
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
 python -m pip install -U numpy flake8 doc8 -q
 
-echo "MAJOR: $MAJOR"
+if ! flake8;
+then
+    (>&2 echo "Please, check your code using flake8.")
+    exit 1
+fi
+
+if ! doc8;
+then
+    (>&2 echo "Please, check your code using doc8.")
+    exit 1
+fi
+
 if [[ $MAJOR -gt 2 ]];
 then
     python -m pip install -U black -q
@@ -21,15 +32,14 @@ then
     then
         echo "*********************************** PONTO 1"
         (>&2 echo "Please, apply the black Python code formatter on the following files:")
-        diff checksum0.txt checksum1.txt | sed '1d; n; d' | awk -F ' ' '{print $4}'
+        diff checksum0.txt checksum1.txt | sed '1d; n; d' | awk -F ' ' '{print $4}' | uniq
+        rm checksum0.txt
+        rm checksum1.txt
         exit 1
     else
-        echo "*********************************** PONTO 2"
         rm checksum0.txt
         rm checksum1.txt
     fi
-else
-    echo "*********************************** PONTO 3"
 fi
 
 python setup.py test && git clean -xdf
