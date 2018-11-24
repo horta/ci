@@ -17,13 +17,17 @@ then
     find . -type f -name "*.py" -exec cksum "{}" \; | sort > checksum1.txt
     if ! diff checksum0.txt checksum1.txt >/dev/null;
     then
+        echo "*********************************** PONTO 1"
         (>&2 echo "Please, apply the black Python code formatter on the following files:")
         diff checksum0.txt checksum1.txt | sed '1d; n; d' | awk -F ' ' '{print $4}'
         exit 1
     else
+        echo "*********************************** PONTO 2"
         rm checksum0.txt
         rm checksum1.txt
     fi
+else
+    echo "*********************************** PONTO 3"
 fi
 
 python setup.py test && git clean -xdf
