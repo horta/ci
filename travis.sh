@@ -5,10 +5,10 @@ set -e
 MAJOR=$(python -c 'import platform; print(platform.python_version())' | awk -F '.' '{print $1}')
 
 mkdir -p ~/.config/matplotlib
-if ! test ~/.config/matplotlib/matplotlibrc
+if ! test ~/.config/matplotlib/matplotlibrc;
+then
     echo "Backend : Agg" > ~/.config/matplotlib/matplotlibrc
 fi
-
 
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
 python -m pip install -U numpy flake8 doc8 pygments -q
