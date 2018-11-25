@@ -7,7 +7,7 @@ MAJOR=$(python -c 'import platform; print(platform.python_version())' | awk -F '
 mkdir -p ~/.config/matplotlib
 if ! test ~/.config/matplotlib/matplotlibrc;
 then
-    echo "Backend : Agg" > ~/.config/matplotlib/matplotlibrc
+    echo "backend : Agg" > ~/.config/matplotlib/matplotlibrc
 fi
 
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q

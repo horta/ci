@@ -11,7 +11,7 @@ if exist %USERPROFILE%\.matplotlib\matplotlibrc (
     echo File %USERPROFILE%\.matplotlib\matplotlibrc exists.
 ) else (
     type NUL > %USERPROFILE%\.matplotlib\matplotlibrc
-    echo "Backend : Agg" >>  %USERPROFILE%\.matplotlib\matplotlibrc
+    echo "backend : Agg" >>  %USERPROFILE%\.matplotlib\matplotlibrc
 )
 
 python -m pip install -U cffi numpy pip pytest pytest-pycodestyle setuptools -q
