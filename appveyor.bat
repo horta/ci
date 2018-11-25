@@ -1,9 +1,18 @@
 @echo off
+setlocal enableextensions enabledelayedexpansion
 
 set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
 
 echo %PATH%
 echo %PYTHON%
+
+md %USERPROFILE%\.matplotlib
+if exist %USERPROFILE%\.matplotlib\matplotlibrc (
+    echo File %USERPROFILE%\.matplotlib\matplotlibrc exists.
+) else (
+    type NUL > %USERPROFILE%\.matplotlib\matplotlibrc
+    echo "Backend : Agg" >>  %USERPROFILE%\.matplotlib\matplotlibrc
+)
 
 python -m pip install -U cffi numpy pip pytest pytest-pycodestyle setuptools -q
 

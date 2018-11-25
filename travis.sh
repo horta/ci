@@ -4,6 +4,12 @@ set -e
 
 MAJOR=$(python -c 'import platform; print(platform.python_version())' | awk -F '.' '{print $1}')
 
+mkdir -p ~/.config/matplotlib
+if ! test ~/.config/matplotlib/matplotlibrc
+    echo "Backend : Agg" > ~/.config/matplotlib/matplotlibrc
+fi
+
+
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
 python -m pip install -U numpy flake8 doc8 pygments -q
 
@@ -30,7 +36,6 @@ then
     find . -type f -name "*.py" -exec cksum "{}" \; | sort > checksum1.txt
     if ! diff checksum0.txt checksum1.txt >/dev/null;
     then
-        echo "*********************************** PONTO 1"
         (>&2 echo "Please, apply the black Python code formatter on the following files:")
         diff checksum0.txt checksum1.txt | sed '1d; n; d' | awk -F ' ' '{print $4}' | uniq
         rm checksum0.txt
