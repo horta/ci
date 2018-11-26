@@ -25,6 +25,13 @@ then
     exit 1
 fi
 
+if msg=$(grep --include=\*.{py,rst} -rnw . -e "\t");
+then
+    (>&2 echo "Please, remove tab character from the following files.")
+    (>&2 echo "$msg")
+    exit 1
+fi
+
 if [[ $MAJOR -gt 2 ]];
 then
     python -m pip install -U black -q
