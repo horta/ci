@@ -43,7 +43,7 @@ then
     exit 1
 fi
 
-if msg=$(grep --include=\*.{py,rst} -rnw . -e "\t");
+if msg=$(grep --include=\*.{py,rst} -Rn -P "\t");
 then
     (>&2 echo "Please, remove tab character from the following files.")
     (>&2 echo "$msg")
