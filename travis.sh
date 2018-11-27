@@ -12,24 +12,24 @@ fi
 
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
 python -m pip install -U numpy flake8 doc8 pygments -q
-# python -m pip install -U shell-timeit
+python -m pip install -U shell-timeit
 
-# cmd="python -c \"import $PKG_NAME\""
-# msg=$(timeit "$(echo $cmd)" | grep loop)
-# elapsed=$(echo "$msg" | awk -F ' ' '{print $1}')
-# unit=$(echo "$msg" | awk -F ' ' '{print $2}')
-# if [[ $unit == "s" ]];
-# then
-#     elapsed=$(bc <<< "$elapsed * 1000")
-# fi
-# elapsed=${elapsed%.*}
+cmd="python -c \"import $PKG_NAME\""
+msg=$(timeit "$(echo $cmd)" | grep loop)
+elapsed=$(echo "$msg" | awk -F ' ' '{print $1}')
+unit=$(echo "$msg" | awk -F ' ' '{print $2}')
+if [[ $unit == "s" ]];
+then
+    elapsed=$(bc <<< "$elapsed * 1000")
+fi
+elapsed=${elapsed%.*}
 
-# echo "Importing time: $elapsed milliseconds"
-# if [[ $elapsed -ge 1000 ]];
-# then
-#     (>&2 echo "Too slow to import $PKG_NAME: more than a second.")
-#     (>&2 echo "Please, fix it as it is taking $elapsed ms.")
-# fi
+echo "Importing time: $elapsed milliseconds"
+if [[ $elapsed -ge 1000 ]];
+then
+    (>&2 echo "Too slow to import $PKG_NAME: more than a second.")
+    (>&2 echo "Please, fix it as it is taking $elapsed ms.")
+fi
 
 if ! flake8;
 then
