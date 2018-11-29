@@ -33,36 +33,64 @@ function check_style() {
     fi
 }
 
-MAJOR=$(python -c 'import platform; print(platform.python_version())' | awk -F '.' '{print $1}')
+function check_black_format() {
+    if [[ $MAJOR -gt 2 ]];
+    then
+        python -m pip install -U black -q
+        git clean -xdf
 
-python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
-python -m pip install -U numpy flake8 rstcheck pygments docutils -q
-python -m pip install -U shell-timeit -q
+        # Make sure the code has been formatted.
+        find . -type f -name "*.py" -exec cksum "{}" \; | sort > checksum0.txt
+        find . -type f -name "*.py" -exec black --quiet --fast {} \;
+        find . -type f -name "*.py" -exec cksum "{}" \; | sort > checksum1.txt
+        if ! diff checksum0.txt checksum1.txt >/dev/null;
+        then
+            err="Please, apply the black Python code formatter"
+            (>&2 echo "$err on the following files:")
+            msg=$(diff checksum0.txt checksum1.txt | sed '1d; n; d')
+            echo $(awk -F ' ' '{print $4}' | uniq)
+            rm checksum0.txt
+            rm checksum1.txt
+            exit 1
+        else
+            rm checksum0.txt
+            rm checksum1.txt
+        fi
+    fi
+}
+
+function has_mkl() {
+    cmd="python -c \"import numpy as np;"
+    cmd="$cmd print(len(np.__config__.blas_mkl_info) > 0)\""
+    has=$(eval $cmd)
+    test $has = True
+}
+
+function has_conda() {
+    type conda >/dev/null
+}
+
+install_deps() {
+    python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
+    python -m pip install -U flake8 rstcheck pygments docutils -q
+    python -m pip install -U shell-timeit -q
+
+    if has_conda;
+    then
+        conda install numpy scipy --yes -q
+    else
+        pip install intel-numpy intel-scipy -q -U
+    fi
+}
+
+cmd="python -c 'import platform; print(platform.python_version())'"
+cmd="$cmd | awk -F '.' '{print \$1}'"
+MAJOR=$(eval $cmd)
 
 matplotlib_backend_fix
+install_deps
 check_style
-
-if [[ $MAJOR -gt 2 ]];
-then
-    python -m pip install -U black -q
-    git clean -xdf
-
-    # Make sure the code has been formatted.
-    find . -type f -name "*.py" -exec cksum "{}" \; | sort > checksum0.txt
-    find . -type f -name "*.py" -exec black --quiet --fast {} \;
-    find . -type f -name "*.py" -exec cksum "{}" \; | sort > checksum1.txt
-    if ! diff checksum0.txt checksum1.txt >/dev/null;
-    then
-        (>&2 echo "Please, apply the black Python code formatter on the following files:")
-        diff checksum0.txt checksum1.txt | sed '1d; n; d' | awk -F ' ' '{print $4}' | uniq
-        rm checksum0.txt
-        rm checksum1.txt
-        exit 1
-    else
-        rm checksum0.txt
-        rm checksum1.txt
-    fi
-fi
+check_black_format
 
 python setup.py test && git clean -xdf
 python -m pip install -q . && git clean -xdf
