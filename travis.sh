@@ -2,17 +2,24 @@
 
 set -e
 
+echo "Ponto 1"
+
 MAJOR=$(python -c 'import platform; print(platform.python_version())' | awk -F '.' '{print $1}')
 
+echo "Ponto 2"
 mkdir -p ~/.config/matplotlib
 if ! test ~/.config/matplotlib/matplotlibrc;
 then
     echo "backend : Agg" > ~/.config/matplotlib/matplotlibrc
 fi
 
+echo "Ponto 3"
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
+echo "Ponto 4"
 python -m pip install -U numpy flake8 doc8 pygments -q
+echo "Ponto 5"
 python -m pip install -U shell-timeit -q
+echo "Ponto 6"
 
 cmd="python -c \"import $PKG_NAME\""
 msg=$(timeit "$(echo $cmd)" | grep loop)
@@ -24,6 +31,7 @@ then
 fi
 elapsed=${elapsed%.*}
 
+echo "Ponto 7"
 echo "Importing time: $elapsed milliseconds"
 if [[ $elapsed -ge 1000 ]];
 then
