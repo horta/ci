@@ -67,7 +67,7 @@ function has_mkl() {
 }
 
 function has_conda() {
-    type conda >/dev/null
+    type conda >/dev/null 2>&1
 }
 
 install_deps() {
