@@ -12,7 +12,7 @@ fi
 
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
 python -m pip install -U numpy flake8 doc8 pygments -q
-python -m pip install -U shell-timeit
+python -m pip install -U shell-timeit -q
 
 cmd="python -c \"import $PKG_NAME\""
 msg=$(timeit "$(echo $cmd)" | grep loop)
