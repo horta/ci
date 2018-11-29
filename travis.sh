@@ -2,42 +2,18 @@
 
 set -e
 
-echo "Ponto 1"
 
 MAJOR=$(python -c 'import platform; print(platform.python_version())' | awk -F '.' '{print $1}')
 
-echo "Ponto 2"
 mkdir -p ~/.config/matplotlib
 if ! test ~/.config/matplotlib/matplotlibrc;
 then
     echo "backend : Agg" > ~/.config/matplotlib/matplotlibrc
 fi
 
-echo "Ponto 3"
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
-echo "Ponto 4"
 python -m pip install -U numpy flake8 doc8 pygments -q
-echo "Ponto 5"
 python -m pip install -U shell-timeit -q
-echo "Ponto 6"
-
-cmd="python -c \"import $PKG_NAME\""
-msg=$(timeit "$(echo $cmd)" | grep loop)
-elapsed=$(echo "$msg" | awk -F ' ' '{print $1}')
-unit=$(echo "$msg" | awk -F ' ' '{print $2}')
-if [[ $unit == "s" ]];
-then
-    elapsed=$(bc <<< "$elapsed * 1000")
-fi
-elapsed=${elapsed%.*}
-
-echo "Ponto 7"
-echo "Importing time: $elapsed milliseconds"
-if [[ $elapsed -ge 1000 ]];
-then
-    (>&2 echo "Too slow to import $PKG_NAME: more than a second.")
-    (>&2 echo "Please, fix it as it is taking $elapsed ms.")
-fi
 
 if ! flake8;
 then
@@ -81,18 +57,36 @@ then
 fi
 
 python setup.py test && git clean -xdf
-python -m pip install -q --process-dependency-links . && git clean -xdf
+python -m pip install -q . && git clean -xdf
 cd ~/
+
+cmd="python -c \"import $PKG_NAME\""
+msg=$(timeit "$(echo $cmd)" | grep loop)
+elapsed=$(echo "$msg" | awk -F ' ' '{print $1}')
+unit=$(echo "$msg" | awk -F ' ' '{print $2}')
+if [[ $unit == "s" ]];
+then
+    elapsed=$(bc <<< "$elapsed * 1000")
+fi
+elapsed=${elapsed%.*}
+
+echo "Importing time: $elapsed milliseconds"
+if [[ $elapsed -ge 1000 ]];
+then
+    (>&2 echo "Too slow to import $PKG_NAME: more than a second.")
+    (>&2 echo "Please, fix it as it is taking $elapsed ms.")
+fi
+
 python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
 python -m pip uninstall $PKG_NAME --yes
 cd $TRAVIS_BUILD_DIR && git clean -xdf
 python -m pip install -r requirements.txt -q
-python -m pip install --process-dependency-links . && git clean -xdf
+python -m pip install . && git clean -xdf
 [ -d doc ] && cd doc && make html && cd $TRAVIS_BUILD_DIR
 git clean -xdf
 python -m pip uninstall $PKG_NAME --yes
 python setup.py sdist
-python -m pip install --process-dependency-links dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
+python -m pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
 cd ~/
 python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
 cd $TRAVIS_BUILD_DIR
