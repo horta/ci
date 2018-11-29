@@ -92,8 +92,8 @@ install_deps
 check_style
 check_black_format
 
-python setup.py test && git clean -xdf
-python -m pip install -q . && git clean -xdf
+python setup.py test && git clean -xdfq
+python -m pip install -q . && git clean -xdfq
 cd ~/
 
 cmd="python -c \"import $PKG_NAME\""
@@ -115,11 +115,11 @@ fi
 
 python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
 python -m pip uninstall $PKG_NAME --yes
-cd $TRAVIS_BUILD_DIR && git clean -xdf
+cd $TRAVIS_BUILD_DIR && git clean -xdfq
 python -m pip install -r requirements.txt -q
-python -m pip install . && git clean -xdf
+python -m pip install . && git clean -xdfq
 [ -d doc ] && cd doc && make html && cd $TRAVIS_BUILD_DIR
-git clean -xdf
+git clean -xdfq
 python -m pip uninstall $PKG_NAME --yes
 python setup.py sdist
 python -m pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
