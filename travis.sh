@@ -34,7 +34,7 @@ function check_style() {
 MAJOR=$(python -c 'import platform; print(platform.python_version())' | awk -F '.' '{print $1}')
 
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
-python -m pip install -U numpy flake8 rstcheck pygments -q
+python -m pip install -U numpy flake8 rstcheck pygments docutils -q
 python -m pip install -U shell-timeit -q
 
 matplotlib_backend_fix
