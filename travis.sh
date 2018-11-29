@@ -2,37 +2,44 @@
 
 set -e
 
+function matplotlib_backend_fix() {
+    mkdir -p ~/.config/matplotlib
+    if ! test ~/.config/matplotlib/matplotlibrc;
+    then
+        echo "backend : Agg" > ~/.config/matplotlib/matplotlibrc
+    fi
+}
+
+function check_style() {
+    if ! flake8;
+    then
+        (>&2 echo "Please, check your code using flake8.")
+        exit 1
+    fi
+
+    if ! rstcheck -r .;
+    then
+        (>&2 echo "Please, check your code using rstcheck.")
+        exit 1
+    fi
+
+    if msg=$(grep --include=\*.{py,rst} -Rn -P "\t");
+    then
+        (>&2 echo "Please, remove tab character from the following files.")
+        (>&2 echo "$msg")
+        exit 1
+    fi
+}
 
 MAJOR=$(python -c 'import platform; print(platform.python_version())' | awk -F '.' '{print $1}')
 
-mkdir -p ~/.config/matplotlib
-if ! test ~/.config/matplotlib/matplotlibrc;
-then
-    echo "backend : Agg" > ~/.config/matplotlib/matplotlibrc
-fi
+matplotlib_backend_fix
+check_style
 
 python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
-python -m pip install -U numpy flake8 doc8 pygments -q
+python -m pip install -U numpy flake8 rstcheck pygments -q
 python -m pip install -U shell-timeit -q
 
-if ! flake8;
-then
-    (>&2 echo "Please, check your code using flake8.")
-    exit 1
-fi
-
-if ! doc8;
-then
-    (>&2 echo "Please, check your code using doc8.")
-    exit 1
-fi
-
-if msg=$(grep --include=\*.{py,rst} -Rn -P "\t");
-then
-    (>&2 echo "Please, remove tab character from the following files.")
-    (>&2 echo "$msg")
-    exit 1
-fi
 
 if [[ $MAJOR -gt 2 ]];
 then
@@ -90,3 +97,5 @@ python -m pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
 cd ~/
 python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
 cd $TRAVIS_BUILD_DIR
+
+
