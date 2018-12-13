@@ -43,7 +43,9 @@ function check_black_format() {
         find . -type f -name "*.py" -exec cksum "{}" \; | sort > checksum0.txt
         find . -type f -name "*.py" -exec black --quiet --fast {} \;
         find . -type f -name "*.py" -exec cksum "{}" \; | sort > checksum1.txt
-        if ! diff checksum0.txt checksum1.txt >/dev/null;
+        cat checksum0.txt
+        cat checksum1.txt
+        if ! diff checksum0.txt checksum1.txt;
         then
             err="Please, apply the black Python code formatter"
             (>&2 echo "$err on the following files:")
