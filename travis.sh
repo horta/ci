@@ -81,9 +81,9 @@ install_deps() {
     then
         conda install numpy scipy --yes -q
     else
-        if ! pip install intel-numpy intel-scipy -q -U;
+        if ! python -m pip install intel-numpy intel-scipy -q -U;
         then
-            pip install numpy scipy -q -U
+            python -m pip install numpy scipy -q -U
         fi
     fi
 }
@@ -91,6 +91,10 @@ install_deps() {
 cmd="python -c 'import platform; print(platform.python_version())'"
 cmd="$cmd | awk -F '.' '{print \$1}'"
 MAJOR=$(eval $cmd)
+
+if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
+    sudo brew install grep --with-default-names
+fi
 
 matplotlib_backend_fix
 install_deps
