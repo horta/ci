@@ -39,18 +39,24 @@ function check_black_format() {
         python -m pip install -U black -q
         git clean -xdf
 
+        echo "Ponto 1"
         # Make sure the code has been formatted.
         find . -type f -name "*.py" -exec cksum "{}" \; | sort > checksum0.txt
         find . -type f -name "*.py" -exec black --quiet --fast {} \;
         find . -type f -name "*.py" -exec cksum "{}" \; | sort > checksum1.txt
+        echo "Ponto 2"
         cat checksum0.txt
         cat checksum1.txt
+        echo "Ponto 3"
         if ! diff checksum0.txt checksum1.txt;
         then
             err="Please, apply the black Python code formatter"
             (>&2 echo "$err on the following files:")
+            echo "Ponto 4"
             msg=$(diff checksum0.txt checksum1.txt | sed '1d; n; d')
+            echo "Ponto 5"
             echo $(awk -F ' ' '{print $4}' | uniq)
+            echo "Ponto 6"
             rm checksum0.txt
             rm checksum1.txt
             exit 1
