@@ -93,7 +93,7 @@ cmd="$cmd | awk -F '.' '{print \$1}'"
 MAJOR=$(eval $cmd)
 
 if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
-    sudo brew install grep --with-default-names
+    brew install grep --with-default-names
 fi
 
 matplotlib_backend_fix
