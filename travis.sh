@@ -25,7 +25,7 @@ function check_style() {
         exit 1
     fi
 
-    if msg=$(grep --include=\*.{py,rst} -Rn -P "\t");
+    if msg=$(grep --include=\*.{py,rst} -Rn -P "\t" 2> /dev/null);
     then
         (>&2 echo "Please, remove tab character from the following files.")
         (>&2 echo "$msg")
