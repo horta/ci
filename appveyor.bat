@@ -1,6 +1,9 @@
 @echo off
 setlocal enableextensions enabledelayedexpansion
 
+set VERSION="0.0.1"
+echo Appveyor continuous integration script (%VERSION%)
+
 set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
 
 echo %PATH%
