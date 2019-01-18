@@ -128,6 +128,7 @@ cd $TRAVIS_BUILD_DIR && git clean -xdfq
 python -m pip install -r requirements.txt -q
 python -m pip install . && git clean -xdfq
 [ -d doc ] && cd doc && make html && cd $TRAVIS_BUILD_DIR
+[ -d docs ] && cd docs && make html && cd $TRAVIS_BUILD_DIR
 git clean -xdfq
 python -m pip uninstall $PKG_NAME --yes
 python setup.py sdist

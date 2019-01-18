@@ -3,11 +3,13 @@ setlocal enableextensions enabledelayedexpansion
 
 set VERSION="0.0.1"
 echo Appveyor continuous integration script (%VERSION%)
+echo ----------------------------------------------
 
+echo
 set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
 
-echo %PATH%
-echo %PYTHON%
+echo PATH=%PATH%
+echo PYTHON=%PYTHON%
 
 md %USERPROFILE%\.matplotlib
 if exist %USERPROFILE%\.matplotlib\matplotlibrc (
@@ -34,6 +36,12 @@ python -m pip install -r requirements.txt
 
 if exist doc\make.bat (
   cd doc && make.bat html
+  if errorlevel 1 exit 1
+  cd %APPVEYOR_BUILD_FOLDER%
+)
+
+if exist docs\make.bat (
+  cd docs && make.bat html
   if errorlevel 1 exit 1
   cd %APPVEYOR_BUILD_FOLDER%
 )
