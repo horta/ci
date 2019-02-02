@@ -93,7 +93,7 @@ cmd="$cmd | awk -F '.' '{print \$1}'"
 MAJOR=$(eval $cmd)
 
 if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
-    brew install grep --with-default-names
+    export PATH $(brew --prefix)/opt/grep/libexec/gnubin:$PATH
 fi
 
 matplotlib_backend_fix
