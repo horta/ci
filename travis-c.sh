@@ -32,7 +32,6 @@ function testit {
     fi
     cmake .. -DCMAKE_INSTALL_PREFIX=$IPREF -DCMAKE_BUILD_TYPE=Release
     make && make test && make install
-    popd && rm -rf build
 
     if [ -z "$TRAVIS_OS_NAME" ]
     then
@@ -49,6 +48,8 @@ function testit {
     if [[ "$OS_NAME" == "osx" ]]; then test -e $IPREF/lib/lib$PKG_NAME.dylib; fi
     if [[ "$OS_NAME" == "osx" ]]; then test -e $IPREF/lib/lib${PKG_NAME}_static.a; fi
     if [[ "$OS_NAME" == "osx" ]]; then test -e $IPREF/include/$PKG_NAME.h; fi
+
+    popd && rm -rf build
 
     cd $orig_dir
 }
