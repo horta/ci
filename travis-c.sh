@@ -49,7 +49,6 @@ function testit {
     if [[ "$OS_NAME" == "osx" ]]; then test -e $IPREF/lib/lib$PKG_NAME.dylib; fi
     if [[ "$OS_NAME" == "osx" ]]; then test -e $IPREF/lib/lib${PKG_NAME}_static.a; fi
     if [[ "$OS_NAME" == "osx" ]]; then test -e $IPREF/include/$PKG_NAME.h; fi
-    bash <(curl -fsSL https://raw.githubusercontent.com/limix/$PKG_NAME/master/install)
 
     cd $orig_dir
 }
