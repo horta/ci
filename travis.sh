@@ -2,6 +2,20 @@
 
 set -e
 
+function finish {
+	rv=$?
+
+    if [ "$rv" != "0" ]
+    then
+        echo -e "\e[31mERROR!\e[39m"
+    else
+        echo -e "\e[32mSuccess!\e[39m"
+    fi
+
+    return $rv
+}
+trap finish EXIT
+
 function matplotlib_backend_fix() {
     mkdir -p ~/.config/matplotlib
     if ! test ~/.config/matplotlib/matplotlibrc;
@@ -88,53 +102,65 @@ install_deps() {
     fi
 }
 
-cmd="python -c 'import platform; print(platform.python_version())'"
-cmd="$cmd | awk -F '.' '{print \$1}'"
-MAJOR=$(eval $cmd)
+function find_pkg_name {
+    python -c "from setuptools import find_packages; print(find_packages()[0])"
+}
 
-if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
-    export PATH=$(brew --prefix)/opt/grep/libexec/gnubin:$PATH
-fi
+function testit {
+    orig_dir=$(pwd)
+    cmd="python -c 'import platform; print(platform.python_version())'"
+    cmd="$cmd | awk -F '.' '{print \$1}'"
+    MAJOR=$(eval $cmd)
 
-matplotlib_backend_fix
-install_deps
-check_style
-check_black_format
+    if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
+        export PATH=$(brew --prefix)/opt/grep/libexec/gnubin:$PATH
+    fi
 
-python setup.py test && git clean -xdfq
-python -m pip install -q . && git clean -xdfq
-cd ~/
+    if [ -z "$PKG_NAME" ]
+    then
+        PKG_NAME=$(find_pkg_name)
+    fi
 
-cmd="python -c \"import $PKG_NAME\""
-msg=$(timeit "$(echo $cmd)" | grep loop)
-elapsed=$(echo "$msg" | awk -F ' ' '{print $1}')
-unit=$(echo "$msg" | awk -F ' ' '{print $2}')
-if [[ $unit == "s" ]];
-then
-    elapsed=$(bc <<< "$elapsed * 1000")
-fi
-elapsed=${elapsed%.*}
+    matplotlib_backend_fix
+    install_deps
+    check_style
+    check_black_format
 
-echo "Importing time: $elapsed milliseconds"
-if [[ $elapsed -ge 1000 ]];
-then
-    (>&2 echo "Too slow to import $PKG_NAME: more than a second.")
-    (>&2 echo "Please, fix it as it is taking $elapsed ms.")
-fi
+    python setup.py test && git clean -xdfq
+    python -m pip install -q . && git clean -xdfq
+    cd ~/
 
-python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
-python -m pip uninstall $PKG_NAME --yes
-cd $TRAVIS_BUILD_DIR && git clean -xdfq
-python -m pip install -r requirements.txt -q
-python -m pip install . && git clean -xdfq
-[ -d doc ] && cd doc && make html && cd $TRAVIS_BUILD_DIR
-[ -d docs ] && cd docs && make html && cd $TRAVIS_BUILD_DIR
-git clean -xdfq
-python -m pip uninstall $PKG_NAME --yes
-python setup.py sdist
-python -m pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
-cd ~/
-python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
-cd $TRAVIS_BUILD_DIR
+    cmd="python -c \"import $PKG_NAME\""
+    msg=$(timeit "$(echo $cmd)" | grep loop)
+    elapsed=$(echo "$msg" | awk -F ' ' '{print $1}')
+    unit=$(echo "$msg" | awk -F ' ' '{print $2}')
+    if [[ $unit == "s" ]];
+    then
+        elapsed=$(bc <<< "$elapsed * 1000")
+    fi
+    elapsed=${elapsed%.*}
 
+    echo "Importing time: $elapsed milliseconds"
+    if [[ $elapsed -ge 1000 ]];
+    then
+        (>&2 echo "Too slow to import $PKG_NAME: more than a second.")
+        (>&2 echo "Please, fix it as it is taking $elapsed ms.")
+    fi
 
+    python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
+    python -m pip uninstall $PKG_NAME --yes
+    cd $orig_dir && git clean -xdfq
+    python -m pip install -r requirements.txt -q
+    python -m pip install . && git clean -xdfq
+    [ -d doc ] && cd doc && make html && cd $orig_dir
+    [ -d docs ] && cd docs && make html && cd $orig_dir
+    git clean -xdfq
+    python -m pip uninstall $PKG_NAME --yes
+    python setup.py sdist
+    python -m pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
+    cd ~/
+    python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
+    cd $orig_dir
+}
+
+(set +x; testit)
