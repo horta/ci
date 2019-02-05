@@ -9,13 +9,14 @@ function trim
 PRJ_NAME=$(trim $(cat NAME))
 VERSION=$(trim $(cat VERSION))
 HEADER=include/$PRJ_NAME.h
+PRJ_NAME_UP=$(echo $PRJ_NAME | awk '{print toupper($0)}')
 
 if ! [ -a ${HEADER} ]; then
     echo "File ${HEADER} does not exist."
     exit 1
 fi
 
-SVER=$(cat ${HEADER} | grep "BGEN_VERSION " | cut -d' ' -f3 | tr -d '"')
+SVER=$(cat ${HEADER} | grep "${PRJ_NAME_UP}_VERSION " | cut -d' ' -f3 | tr -d '"')
 
 if [[ $VERSION != $SVER ]];
 then
@@ -28,9 +29,9 @@ VERSION_MAJOR=$(echo $VERSION | cut -d'.' -f1)
 VERSION_MINOR=$(echo $VERSION | cut -d'.' -f2)
 VERSION_PATCH=$(echo $VERSION | cut -d'.' -f3)
 
-MAJOR=$(cat ${HEADER} | grep "BGEN_VERSION_MAJOR " | cut -d' ' -f3 | tr -d ' ')
-MINOR=$(cat ${HEADER} | grep "BGEN_VERSION_MINOR " | cut -d' ' -f3 | tr -d ' ')
-PATCH=$(cat ${HEADER} | grep "BGEN_VERSION_PATCH " | cut -d' ' -f3 | tr -d ' ')
+MAJOR=$(cat ${HEADER} | grep "${PRJ_NAME_UP}_VERSION_MAJOR " | cut -d' ' -f3 | tr -d ' ')
+MINOR=$(cat ${HEADER} | grep "${PRJ_NAME_UP}_VERSION_MINOR " | cut -d' ' -f3 | tr -d ' ')
+PATCH=$(cat ${HEADER} | grep "${PRJ_NAME_UP}_VERSION_PATCH " | cut -d' ' -f3 | tr -d ' ')
 
 if [ $VERSION_MAJOR -ne $MAJOR ] || [ $VERSION_MINOR -ne $MINOR ] || [ $VERSION_PATCH -ne $PATCH ];
 then
@@ -38,6 +39,8 @@ then
     echo "$MAJOR.$MINOR.$PATCH differ."
     echo "Please, compare the \`$HEADER\` and \`VERSION\` files."
     exit 1
+else
+    echo -e "\e[32mSuccess: versions match.\e[39m"
 fi
 
 exit 0
