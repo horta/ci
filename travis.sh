@@ -95,10 +95,10 @@ install_deps() {
     then
         conda install numpy scipy --yes -q
     else
-        if ! python -m pip install intel-numpy intel-scipy -q -U;
-        then
-            python -m pip install numpy scipy -q -U
-        fi
+        # if ! python -m pip install intel-numpy intel-scipy -q -U;
+        # then
+        python -m pip install numpy scipy -q -U
+        # fi
     fi
 }
 
