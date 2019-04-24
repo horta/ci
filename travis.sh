@@ -123,7 +123,8 @@ function testit {
     check_style
     check_black_format
 
-    python setup.py test && git clean -xdfq
+    python setup.py test
+    git clean -xdfq
     python -m pip install -q . && git clean -xdfq
     cd ~/
 
