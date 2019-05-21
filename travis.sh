@@ -75,6 +75,21 @@ function check_black_format() {
     fi
 }
 
+function check_broken_links() {
+
+    if type gem && gem install awesome_bot
+    then
+        if [ -f README.md ]
+        then
+            awesome_bot README.md --allow-dupe --allow-redirect --skip-save-results
+            if ! $?
+            then
+                exit 1
+            fi
+        fi
+    fi
+}
+
 function has_mkl() {
     cmd="python -c \"import numpy as np;"
     cmd="$cmd print(len(np.__config__.blas_mkl_info) > 0)\""
@@ -122,6 +137,7 @@ function testit {
     install_deps
     check_style
     check_black_format
+    check_broken_links
 
     python setup.py test
     git clean -xdfq
