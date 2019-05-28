@@ -32,11 +32,14 @@ function check_style() {
         exit 1
     fi
 
-    rstcheck --version
-    if ! rstcheck -r .;
+    if python -c "import docutils; print(docutils.__version__);"
     then
-        (>&2 echo "Please, check your code using rstcheck.")
-        exit 1
+        rstcheck --version
+        if ! rstcheck -r .;
+        then
+            (>&2 echo "Please, check your code using rstcheck.")
+            exit 1
+        fi
     fi
 
     if msg=$(grep --include=\*.{py,rst} -Rn -P "\t" 2> /dev/null);
