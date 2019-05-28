@@ -32,7 +32,7 @@ function check_style() {
         exit 1
     fi
 
-    if python -c "import docutils; print(docutils.__version__);"
+    if [ "${TRAVIS_OS_NAME}" == "linux" ];
     then
         rstcheck --version
         if ! rstcheck -r .;
