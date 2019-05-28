@@ -101,7 +101,7 @@ function has_conda() {
     type conda >/dev/null 2>&1
 }
 
-install_deps() {
+function install_deps() {
     python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
     python -m pip install -U flake8 rstcheck pygments docutils -q
     python -m pip install -U shell-timeit -q
