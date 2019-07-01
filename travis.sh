@@ -165,7 +165,6 @@ function testit {
         (>&2 echo "Please, fix it as it is taking $elapsed ms.")
     fi
 
-    echo "MODIFIQUEI"
     cmd="import sys; import $PKG_NAME; sys.exit(not hasattr($PKG_NAME, 'test'))"
     if python -c "$cmd"
     then
@@ -182,7 +181,11 @@ function testit {
     python setup.py sdist
     python -m pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
     cd ~/
-    python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
+    cmd="import sys; import $PKG_NAME; sys.exit(not hasattr($PKG_NAME, 'test'))"
+    if python -c "$cmd"
+    then
+        python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
+    fi
     cd $orig_dir
 }
 
