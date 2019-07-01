@@ -3,7 +3,7 @@
 set -e
 
 function finish {
-	rv=$?
+    rv=$?
 
     if [ "$rv" != "0" ]
     then
