@@ -165,6 +165,7 @@ function testit {
         (>&2 echo "Please, fix it as it is taking $elapsed ms.")
     fi
 
+    echo "MODIFIQUEI"
     cmd="import sys; import $PKG_NAME; sys.exit(not hasattr($PKG_NAME, 'test'))"
     if python -c "$cmd"
     then
