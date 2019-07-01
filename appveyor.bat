@@ -28,6 +28,8 @@ python -m pip install .
 cd ..
 
 python -c "import sys; import %PKG_NAME%; sys.exit(not hasattr(%PKG_NAME%, 'test'))"
+echo Error level %errorlevel%
+python -c "import sys; import %PKG_NAME%; sys.exit(not hasattr(%PKG_NAME%, 'test'))"
 if errorlevel 0 (
   python -c "import sys; import %PKG_NAME%; sys.exit(%PKG_NAME%.test())"
 )
