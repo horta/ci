@@ -122,7 +122,10 @@ then
     (>&2 echo "Please, fix it as it is taking $elapsed ms.")
 fi
 
-python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
+if python -c "import sys; import $PKG_NAME; sys.exit(not hasattr($PKG_NAME, 'test'))"
+then
+    python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
+fi
 python -m pip uninstall $PKG_NAME --yes
 cd $TRAVIS_BUILD_DIR && git clean -xdfq
 python -m pip install -r requirements.txt -q
