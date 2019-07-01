@@ -27,7 +27,9 @@ if errorlevel 1 exit 1
 python -m pip install .
 cd ..
 
+echo "DANILO MUDOU"
 python -c "import sys; import %PKG_NAME%; sys.exit(not hasattr(%PKG_NAME%, 'test'))"
+echo Exit Code is %errorlevel%
 if errorlevel 0 (
   python -c "import sys; import %PKG_NAME%; sys.exit(%PKG_NAME%.test())"
 )
