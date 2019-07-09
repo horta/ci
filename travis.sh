@@ -145,7 +145,7 @@ function testit {
 
     python setup.py test
     git clean -xdfq
-    python -m pip install -q . && git clean -xdfq
+    python -m pip install -q --user . && git clean -xdfq
     cd ~/
 
     cmd="python -c \"import $PKG_NAME\""
@@ -172,8 +172,8 @@ function testit {
     fi
     python -m pip uninstall $PKG_NAME --yes
     cd $orig_dir && git clean -xdfq
-    python -m pip install -r requirements.txt -q
-    python -m pip install . && git clean -xdfq
+    python -m pip install -r requirements.txt -q --user
+    python -m pip install --user . && git clean -xdfq
     [ -d doc ] && cd doc && make html && cd $orig_dir
     [ -d docs ] && cd docs && make html && cd $orig_dir
     git clean -xdfq
