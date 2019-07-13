@@ -24,4 +24,4 @@ function sdist_test {
     cd $TRAVIS_BUILD_DIR
 }
 
-(set +x; sdist_test)
+sdist_test

@@ -43,4 +43,4 @@ function install_test {
     git clean -xdfq
 }
 
-(set +x; install_test)
+install_test

@@ -22,4 +22,4 @@ function doctest {
     fi
 }
 
-(set +x; doctest)
+doctest

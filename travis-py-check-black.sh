@@ -27,4 +27,4 @@ function check_black_format() {
     fi
 }
 
-(set +x; check_black_format)
+check_black_format

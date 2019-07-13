@@ -7,4 +7,4 @@ function devtest {
     git clean -xdfq
 }
 
-(set +x; devtest)
+devtest

@@ -22,4 +22,4 @@ function install_deps() {
     fi
 }
 
-(set +x; install_deps)
+install_deps

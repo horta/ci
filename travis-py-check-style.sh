@@ -30,5 +30,4 @@ function check_style() {
     echo "😊 Style check was a success."
 }
 
-
-(set +x; check_style)
+check_style

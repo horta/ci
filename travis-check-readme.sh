@@ -17,4 +17,4 @@ function check_broken_links() {
     fi
 }
 
-(set +x; check_broken_links)
+check_broken_links

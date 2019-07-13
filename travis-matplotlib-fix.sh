@@ -10,4 +10,4 @@ function matplotlib_backend_fix() {
     fi
 }
 
-(set +x; matplotlib_backend_fix)
+matplotlib_backend_fix
