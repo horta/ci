@@ -35,7 +35,13 @@ if errorlevel 1 exit 1
 
 python -m pip uninstall %PKG_NAME% --yes
 cd %APPVEYOR_BUILD_FOLDER%
-python -m pip install -r requirements.txt
+
+if exist requirements.txt (
+  python -m pip install -r requirements.txt
+)
+if exist doc\requirements.txt (
+  python -m pip install -r doc\requirements.txt
+)
 
 if exist doc\make.bat (
   cd doc && make.bat html
