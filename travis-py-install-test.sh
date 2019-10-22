@@ -19,10 +19,11 @@ function check_import_time {
     elapsed=${elapsed%.*}
 
     echo "Importing time: $elapsed milliseconds"
-    if [[ $elapsed -ge 1000 ]];
+    if [[ $elapsed -ge 1500 ]];
     then
         (>&2 echo "Too slow to import $PKG_NAME: more than a second.")
         (>&2 echo "Please, fix it as it is taking $elapsed ms.")
+        exit 1
     fi
 }
 
