@@ -9,6 +9,7 @@ function has_conda() {
 function install_deps() {
     python -m pip install -U setuptools pip pytest pytest-pycodestyle
     python -m pip install -U flake8 rstcheck pygments docutils
+    python -m pip install -U sphinx
     python -m pip install -U rstcheck
     python -m pip install -U shell-timeit
 
