@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 set -e
 
 function check_broken_links() {
