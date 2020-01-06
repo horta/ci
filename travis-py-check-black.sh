@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Remove this file as its functionality is already covered
+# by travis-py-check-style.
+
 set -e
 
 function check_black_format() {
@@ -14,7 +17,7 @@ function check_black_format() {
     cat checksum1.txt
     if ! diff checksum0.txt checksum1.txt;
     then
-        err="Please, apply the black Python code formatter"
+        err="🔥 Please, apply the black Python code formatter"
         (>&2 echo "$err on the following files:")
         msg=$(diff checksum0.txt checksum1.txt | sed '1d; n; d')
         echo $(echo $msg | awk -F ' ' '{print $4}' | uniq)
