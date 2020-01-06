@@ -13,6 +13,11 @@ function check_style() {
     if [ "${TRAVIS_OS_NAME}" == "linux" ];
     then
         rstcheck --version
+        if ! rstcheck -h | grep 'Sphinx is enabled';
+        then
+            (>&2 echo "🔥 Sphinx is not enabled. Please, install it first.")
+            exit 1
+        fi
         if ! rstcheck -r .;
         then
             (>&2 echo "🔥 Please, check your code using rstcheck.")
