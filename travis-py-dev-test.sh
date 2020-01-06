@@ -3,7 +3,7 @@
 set -e
 
 function devtest {
-    python setup.py test
+    python3 setup.py test
     git clean -xdfq
 }
 

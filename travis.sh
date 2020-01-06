@@ -53,7 +53,7 @@ function check_style() {
 function check_black_format() {
     if [[ $MAJOR -gt 2 ]];
     then
-        python -m pip install -U black -q
+        python3 -m pip install -U black -q
         git clean -xdf
 
         # Make sure the code has been formatted.
@@ -94,7 +94,7 @@ function check_broken_links() {
 }
 
 function has_mkl() {
-    cmd="python -c \"import numpy as np;"
+    cmd="python3 -c \"import numpy as np;"
     cmd="$cmd print(len(np.__config__.blas_mkl_info) > 0)\""
     has=$(eval $cmd)
     test $has = True
@@ -105,26 +105,26 @@ function has_conda() {
 }
 
 function install_deps() {
-    python -m pip install -U setuptools pip pytest pytest-pycodestyle -q
-    python -m pip install -U flake8 rstcheck pygments docutils -q
-    python -m pip install -U rstcheck -q
-    python -m pip install -U shell-timeit -q
+    python3 -m pip install -U setuptools pip pytest pytest-pycodestyle -q
+    python3 -m pip install -U flake8 rstcheck pygments docutils -q
+    python3 -m pip install -U rstcheck -q
+    python3 -m pip install -U shell-timeit -q
 
     if has_conda;
     then
         conda install numpy scipy --yes -q
     else
-        python -m pip install numpy scipy -q -U
+        python3 -m pip install numpy scipy -q -U
     fi
 }
 
 function find_pkg_name {
-    python -c "from setuptools import find_packages; print(find_packages()[0])"
+    python3 -c "from setuptools import find_packages; print(find_packages()[0])"
 }
 
 function testit {
     orig_dir=$(pwd)
-    cmd="python -c 'import platform; print(platform.python_version())'"
+    cmd="python3 -c 'import platform; print(platform.python_version())'"
     cmd="$cmd | awk -F '.' '{print \$1}'"
     MAJOR=$(eval $cmd)
 
@@ -143,12 +143,12 @@ function testit {
     check_black_format
     check_broken_links
 
-    python setup.py test
+    python3 setup.py test
     git clean -xdfq
-    python -m pip install -q . && git clean -xdfq
+    python3 -m pip install -q . && git clean -xdfq
     cd ~/
 
-    cmd="python -c \"import $PKG_NAME\""
+    cmd="python3 -c \"import $PKG_NAME\""
     msg=$(timeit "$(echo $cmd)" | grep loop)
     elapsed=$(echo "$msg" | awk -F ' ' '{print $1}')
     unit=$(echo "$msg" | awk -F ' ' '{print $2}')
@@ -166,25 +166,25 @@ function testit {
     fi
 
     cmd="import sys; import $PKG_NAME; sys.exit(not hasattr($PKG_NAME, 'test'))"
-    if python -c "$cmd"
+    if python3 -c "$cmd"
     then
-        python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
+        python3 -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
     fi
-    python -m pip uninstall $PKG_NAME --yes
+    python3 -m pip uninstall $PKG_NAME --yes
     cd $orig_dir && git clean -xdfq
-    python -m pip install -r requirements.txt -q
-    python -m pip install . && git clean -xdfq
+    python3 -m pip install -r requirements.txt -q
+    python3 -m pip install . && git clean -xdfq
     [ -d doc ] && cd doc && make html && cd $orig_dir
     [ -d docs ] && cd docs && make html && cd $orig_dir
     git clean -xdfq
-    python -m pip uninstall $PKG_NAME --yes
-    python setup.py sdist
-    python -m pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
+    python3 -m pip uninstall $PKG_NAME --yes
+    python3 setup.py sdist
+    python3 -m pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
     cd ~/
     cmd="import sys; import $PKG_NAME; sys.exit(not hasattr($PKG_NAME, 'test'))"
-    if python -c "$cmd"
+    if python3 -c "$cmd"
     then
-        python -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
+        python3 -c "import sys; import $PKG_NAME; sys.exit($PKG_NAME.test())"
     fi
     cd $orig_dir
 }

@@ -3,7 +3,7 @@
 set -e
 
 function check_black_format() {
-    python -m pip install -U black -q
+    python3 -m pip install -U black -q
     git clean -xdf
 
     # Make sure the code has been formatted.

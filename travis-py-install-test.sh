@@ -3,12 +3,12 @@
 set -e
 
 function find_pkg_name {
-    python -c "from setuptools import find_packages; print(find_packages()[0])"
+    python3 -c "from setuptools import find_packages; print(find_packages()[0])"
 }
 
 function check_import_time {
     PKG_NAME=$1
-    cmd="python -c \"import $PKG_NAME\""
+    cmd="python3 -c \"import $PKG_NAME\""
     msg=$(timeit "$(echo $cmd)" | grep loop)
     elapsed=$(echo "$msg" | awk -F ' ' '{print $1}')
     unit=$(echo "$msg" | awk -F ' ' '{print $2}')
@@ -33,13 +33,13 @@ function install_test {
         PKG_NAME=$(find_pkg_name)
     fi
 
-    python -m pip install -q .
+    python3 -m pip install -q .
     git clean -xdfq
     cd ~/
 
     check_import_time $PKG_NAME
 
-    python -m pip uninstall $PKG_NAME --yes
+    python3 -m pip uninstall $PKG_NAME --yes
     cd $TRAVIS_BUILD_DIR
     git clean -xdfq
 }

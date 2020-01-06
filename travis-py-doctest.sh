@@ -3,7 +3,7 @@
 set -e
 
 function find_pkg_name {
-    python -c "from setuptools import find_packages; print(find_packages()[0])"
+    python3 -c "from setuptools import find_packages; print(find_packages()[0])"
 }
 
 function doctest {
@@ -15,10 +15,10 @@ function doctest {
 
     if [ -d doc ]
     then
-        python -m pip install -r doc/requirements.txt -q
+        python3 -m pip install -r doc/requirements.txt -q
         (cd doc && make html)
         git clean -xdfq
-        python -m pip uninstall $PKG_NAME --yes
+        python3 -m pip uninstall $PKG_NAME --yes
     fi
 }
 
