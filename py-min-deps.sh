@@ -5,9 +5,9 @@ SCIPY="no"
 
 while :; do
     case $1 in
-        --numpy) NUMPY="yes"            
+        --numpy) NUMPY="yes"
         ;;
-        --scipy) SCIPY="yes"            
+        --scipy) SCIPY="yes"
         ;;
         *) break
     esac

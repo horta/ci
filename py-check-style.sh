@@ -4,7 +4,7 @@ RSTCHECK="no"
 
 while :; do
     case $1 in
-        --rstcheck) RSTCHECK="yes"            
+        --rstcheck) RSTCHECK="yes"
         ;;
         *) break
     esac
