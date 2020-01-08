@@ -39,7 +39,7 @@ function install_test
     
 }
 
-if ! python3 pip install -U shell-timeit
+if ! python3 -m pip install -U shell-timeit
 then
     (>&2 echo "🔥 Could not install `shell-timeit`.")
     exit 1
