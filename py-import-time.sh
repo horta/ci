@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 function find_pkg_name
 {
     python3 -c "from setuptools import find_packages; print(find_packages()[0])"
@@ -26,8 +24,6 @@ function check_import_time
         (>&2 echo "🔥 Too slow to import $PKG_NAME: more than a second.")
         (>&2 echo "🔥 Please, fix it as it is taking $elapsed ms.")
         exit 1
-    else
-        echo "😊 Importing time check was a success."
     fi
 }
 
@@ -43,5 +39,11 @@ function install_test
     
 }
 
-python3 pip install -U shell-timeit
+if ! python3 pip install -U shell-timeit
+then
+    (>&2 echo "🔥 Could not install `shell-timeit`.")
+    exit 1
+fi
+
 install_test
+echo "😊 Importing time check was a success."
