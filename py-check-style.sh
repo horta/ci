@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 function check_tab
 {
     git clean -xdfq
@@ -19,7 +17,6 @@ function check_flake8_style
     git clean -xdfq
     python3 -m pip install -q -U flake8
 
-    echo "flake8:" $(flake8 --version)
     if ! flake8;
     then
         (>&2 echo "🔥 Please, check your code using flake8.")

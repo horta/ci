@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 NUMPY="no"
 SCIPY="no"
 
