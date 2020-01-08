@@ -4,12 +4,16 @@ set -e
 
 function check_broken_links
 {
+    [ ! -f README.md ] && return 0
+
     if type gem && gem install awesome_bot
     then
-        if [ -f README.md ]
+        if awesome_bot README.md --allow-dupe --allow-redirect --skip-save-results
         then
-            awesome_bot README.md --allow-dupe --allow-redirect --skip-save-results
-            [ $? -ne 0 ] && exit 1
+            echo "😊 README check was a success."
+        else
+            (>&2 echo "🔥 README check failed.")
+            exit 1
         fi
     fi
 }
