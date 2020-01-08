@@ -9,10 +9,7 @@ function check_broken_links
         if [ -f README.md ]
         then
             awesome_bot README.md --allow-dupe --allow-redirect --skip-save-results
-            if [ $? -ne 0 ]
-            then
-                exit 1
-            fi
+            [ $? -ne 0 ] && exit 1
         fi
     fi
 }

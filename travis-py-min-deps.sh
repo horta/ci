@@ -7,11 +7,10 @@ function has_conda() {
 }
 
 function install_deps() {
-    python3 -m pip install -U setuptools wheel pip pytest pytest-pycodestyle
-    python3 -m pip install -U flake8 rstcheck pygments docutils
-    python3 -m pip install -U sphinx
-    python3 -m pip install -U rstcheck
-    python3 -m pip install -U shell-timeit
+    # python3 -m pip install -U pytest-pycodestyle
+    python3 -m pip install -U setuptools wheel pip
+    # flake8 rstcheck rstcheck shell-timeit
+    # python3 -m pip install -U pygments docutils sphinx
 
     # Try to install conda-provided numpy and scipy first as they
     # are faster because of the MKL library.
