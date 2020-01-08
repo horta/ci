@@ -27,14 +27,20 @@ function try_conda_install
     else
         python3 -m pip install $1 -U
     fi
+    if [ $? -ne 0 ]
+    then
+        (>&2 echo "🔥 We have failed to install `$1`.")
+        exit 1
+    fi
 }
 
 function install_deps
 {
     python3 -m pip install -U setuptools wheel pip
 
-    [ $NUMPY = "yes" ] && try_conda_install numpy
-    [ $SCIPY = "yes" ] && try_conda_install scipy
+    if [ $NUMPY = "yes" ]; then try_conda_install numpy; fi
+    if [ $SCIPY = "yes" ]; then try_conda_install scipy; fi
 }
 
 install_deps
+echo "😊 Dependencies installation was a success."
