@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+RSTCHECK="no"
+
+while :; do
+    case $1 in
+        --rstcheck) RSTCHECK="yes"            
+        ;;
+        *) break
+    esac
+    shift
+done
+
 function check_tab
 {
     git clean -xdfq
@@ -75,6 +86,6 @@ function check_black_format
 
 check_tab
 check_flake8_style
-check_rstcheck
+if [ $RSTCHECK = "yes" ]; then check_rstcheck; fi
 check_black_format
 echo "😊 Style check was a success."
