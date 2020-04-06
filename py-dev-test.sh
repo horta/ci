@@ -17,6 +17,12 @@ function install_deps
 
 function devtest
 {
+    if ! python3 setup.py build_ext --inplace
+    then
+        (>&2 echo "🔥 Development test has failed.")
+        exit 1
+    fi
+
     if ! python3 setup.py test
     then
         (>&2 echo "🔥 Development test has failed.")
