@@ -2,12 +2,15 @@
 
 NUMPY="no"
 SCIPY="no"
+PANDAS="no"
 
 while :; do
     case $1 in
         --numpy) NUMPY="yes"
         ;;
         --scipy) SCIPY="yes"
+        ;;
+        --pandas) PANDAS="yes"
         ;;
         *) break
     esac
@@ -40,6 +43,7 @@ function install_deps
 
     if [ $NUMPY = "yes" ]; then try_conda_install numpy; fi
     if [ $SCIPY = "yes" ]; then try_conda_install scipy; fi
+    if [ $PANDAS = "yes" ]; then try_conda_install pandas; fi
 }
 
 install_deps

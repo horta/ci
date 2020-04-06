@@ -22,10 +22,7 @@ function sdist_test
 python3 setup.py sdist
 python3 -m pip install dist/$(ls dist | grep -i -E '\.(gz)$' | head -1)
 
-cd ~/
-pushd .
+cd ~/ && pushd .
 sdist_test
-popd .
-git clean -xdfq
-
+popd . && git clean -xdfq
 echo "😊 Source distribution test was a success."
